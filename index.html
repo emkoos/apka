@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mała niespodzianka ❤️</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    background: linear-gradient(135deg, #ffe6e6, #fff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    padding: env(safe-area-inset-top)
+             env(safe-area-inset-right)
+             env(safe-area-inset-bottom)
+             env(safe-area-inset-left);
+  }
+
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 24px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    margin: 0 16px;
+  }
+
+  .screen.active {
+    display: block;
+  }
+
+  h1, h2 {
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .answers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  /* OBRAZY – iPhone friendly */
+  .answers img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease, border 0.2s ease;
+  }
+
+  .answers img:hover {
+    border-color: #ff6b6b;
+  }
+
+  .answers img:active {
+    transform: scale(0.96);
+  }
+
+  .answer-btn {
+    padding: 12px;
+    background: #f5f5f5;
+    font-size: 16px;
+    border-radius: 14px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    color: #333;             
+    }
+
+  .answer-btn:active {
+    transform: scale(0.97);
+  }
+
+    .answer-btn:hover {
+    border-color: #ff6b6b;
+  }
+
+  .timer {
+    margin-top: 16px;
+    font-weight: bold;
+  }
+
+  button {
+    margin-top: 24px;
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    border: none;
+    border-radius: 28px;
+    background: #ff6b6b;
+    color: white;
+  }
+
+  canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- START -->
+<div class="screen active">
+  <h1>Hej Ada ❤️</h1>
+  <p>
+    Bardzo mi przykro, że jesteś chora 😢<br>
+    Chciałbym Ci ugotować rosół,<br>
+    ale kolejny trening mnie czeka… 🏃‍♂️
+  </p>
+  <p>
+    W zamian mam dla Ciebie coś na poprawę humoru 🎁<br>
+    …ale najpierw kilka pytań 😏
+  </p>
+  <button onclick="next()">Zaczynamy ➡️</button>
+</div>
+
+<!-- PYTANIE 1 -->
+<div class="screen">
+  <h2>Medal, przy którym się poznaliśmy:</h2>
+  <div class="answers">
+    <img src="medal1.png" onclick="answer(true, this)">
+    <img src="medal2.png" onclick="answer(false, this)">
+    <img src="medal3.png" onclick="answer(false, this)">
+  </div>
+  <div class="timer"></div>
+</div>
+
+<!-- PYTANIE 2 -->
+<div class="screen">
+  <h2>Nasza pierwsza wspólna trasa,<br>z kawką na finishu ☕</h2>
+  <div class="answers">
+    <img src="trasa2.png" onclick="answer(false, this)">
+    <img src="trasa1.png" onclick="answer(true, this)">
+    <img src="trasa3.png" onclick="answer(false, this)">
+  </div>
+  <div class="timer"></div>
+</div>
+
+<!-- PYTANIE 3 -->
+<div class="screen">
+  <h2>Ile miesięcy nam stuknęło<br>kilkanaście godzin temu?</h2>
+  <div class="answers">
+    <button class="answer-btn" onclick="answer(false, this)">9</button>
+    <button class="answer-btn" onclick="answer(true, this)">10</button>
+    <button class="answer-btn" onclick="answer(false, this)">11</button>
+  </div>
+  <div class="timer"></div>
+</div>
+
+<!-- PYTANIE 4 -->
+<div class="screen">
+  <h2>O co NIE pytałaś mnie na Stravie<br>przed związkiem?</h2>
+  <div class="answers">
+    <button class="answer-btn" onclick="answer(false, this)">o boisko na nowej hucie</button>
+    <button class="answer-btn" onclick="answer(false, this)">o nazwę podcastu Kryminatorium</button>
+    <button class="answer-btn" onclick="answer(true, this)">o moje Asicsy</button>
+  </div>
+  <div class="timer"></div>
+</div>
+
+<!-- PYTANIE 5 -->
+<div class="screen">
+  <h2>W czym najbardziej przeszkodził<br>ci katar skurwiel?</h2>
+  <div class="answers">
+    <button class="answer-btn" onclick="answer(true, this)">w dzisiejszym bieganiu</button>
+    <button class="answer-btn" onclick="answer(false, this)">w pójściu do kina</button>
+    <button class="answer-btn" onclick="answer(false, this)">w oglądaniu meczów Realu</button>
+  </div>
+  <div class="timer"></div>
+</div>
+
+<!-- PODSUMOWANIE -->
+<div class="screen">
+  <h2 id="score"></h2>
+  <p id="resultText"></p>
+  <button onclick="next()">A teraz czas na prezent… 🎁</button>
+</div>
+
+<!-- PREZENT -->
+<div class="screen">
+  <h1>Dla Ciebie ❤️</h1>
+  <img src="prezent.png" style="width:100%; border-radius:16px;">
+  <h2>Będą czekać :)</h2>
+  <h2>Zdrówka! A rosół i tak mogę zrobić</h2>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+    let screens = document.querySelectorAll('.screen');
+    let index = 0;
+    let points = 0;
+    let timer;
+    
+    function next() {
+      clearInterval(timer);
+      screens[index].classList.remove('active');
+      index++;
+      screens[index].classList.add('active');
+    
+      // jeśli to ekran z timerem – startuj licznik
+      if (screens[index].querySelector('.timer')) {
+        startTimer();
+      }
+    
+      // 🔥 JEŚLI TO PODSUMOWANIE – LICZYMY WYNIK
+      if (screens[index].querySelector('#score')) {
+        document.getElementById('score').textContent = `${points}/5`;
+        document.getElementById('resultText').textContent =
+          points === 5 ? "Idealnie <3 Super że pamiętasz" :
+          points === 4 ? "Prawie idealnie! Pewnie źle sformułowałem pytanie :)" :
+          points === 3 ? "Są pomyłki, ale zdane!" :
+          points === 2 ? "Możesz później podejść ponownie ;)" :
+          "Pewnie masz wysoką gorączkę :P";
+      }
+    
+      // confetti na ostatniej stronie
+      if (index === screens.length - 1) {
+        startConfetti();
+      }
+    }
+    
+    function answer(correct, el) {
+      el.style.borderColor = '#ff6b6b';
+      setTimeout(() => {
+        if (correct) points++;
+        next();
+      }, 300);
+    }
+    
+    function startTimer() {
+      let time = 10;
+      let t = screens[index].querySelector('.timer');
+      t.textContent = `⏱️ ${time}s`;
+    
+      timer = setInterval(() => {
+        time--;
+        t.textContent = `⏱️ ${time}s`;
+        if (time === 0) next();
+      }, 1000);
+    }
+    
+    function startConfetti() {
+      const c = document.getElementById('confetti');
+      const ctx = c.getContext('2d');
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+    
+      let pieces = Array.from({ length: 150 }, () => ({
+        x: Math.random() * c.width,
+        y: Math.random() * c.height,
+        r: Math.random() * 6 + 2,
+        d: Math.random() * 2 + 1
+      }));
+    
+      function draw() {
+        ctx.clearRect(0, 0, c.width, c.height);
+        pieces.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          p.y += p.d;
+          if (p.y > c.height) p.y = 0;
+        });
+        requestAnimationFrame(draw);
+      }
+    
+      draw();
+    }
+    </script>
+
+</body>
+</html>
